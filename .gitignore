@@ -1,0 +1,52 @@
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+.Python
+env/
+venv/
+.venv/
+ENV/
+pip-log.txt
+pip-delete-this-directory.txt
+*.egg-info/
+dist/
+build/
+*.egg
+.eggs/
+
+# Mem0 local artifacts (not used, but guard anyway)
+mem0_history.db
+*.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*.DS_Store
+
+# Content drafts — not for public repo
+BLOG.md
+X_THREAD.md
+LINKEDIN_POST.md
+
+# Logs
+*.log
+logs/
+
+# Coverage
+.coverage
+htmlcov/
+.pytest_cache/
+
+# mypy / ruff
+.mypy_cache/
+.ruff_cache/

@@ -1,0 +1,8 @@
+slack-bolt
+langchain
+langchain-openai
+langchain-core
+mem0ai
+pydantic
+pydantic-settings
+python-dotenv
