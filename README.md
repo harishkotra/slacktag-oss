@@ -256,6 +256,7 @@ LLM_MODEL=meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo
 | `forget this channel` | Same as `!clear` |
 | `!memory` | Shows everything the bot currently remembers for this scope |
 | `!summarize` | Asks the LLM to write a readable summary of all stored memories for this scope |
+| `!catchmeup` | Personalized catch-up digest — cross-references channel history with your DM memory to surface what's most relevant *to you* |
 | React 📌 to any message | Explicitly saves that message as a memory fact for this channel |
 | React 🗑️ to any message | Removes the closest matching memory fact for that message |
 

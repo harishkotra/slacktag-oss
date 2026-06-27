@@ -71,6 +71,35 @@ def _format_memories_for_display(memories: list) -> str:
     return "\n".join(lines)
 
 
+def handle_catchmeup(channel_id: str, user_id: str) -> str:
+    channel_scope = channel_memory.scope_id(channel_id)
+    channel_facts = channel_memory.get_all(channel_scope)
+    if not channel_facts:
+        return "No channel history in memory yet — nothing to catch you up on."
+
+    user_scope = dm_memory.scope_id(user_id)
+    user_facts = dm_memory.get_all(user_scope)
+
+    channel_context = _format_memories_for_display(channel_facts)
+    user_context = (
+        _format_memories_for_display(user_facts)
+        if user_facts
+        else "No personal context available — give a generic summary."
+    )
+
+    prompt = [
+        SystemMessage(content="You are a helpful assistant summarizing a Slack channel for a returning teammate."),
+        HumanMessage(content=(
+            f"Here is what has been discussed in this channel:\n\n{channel_context}\n\n"
+            f"Here is what I know about the person asking:\n\n{user_context}\n\n"
+            "Write a personalized catch-up digest (4–8 bullet points) highlighting what's most "
+            "relevant and important for this specific person. Lead with a one-sentence intro. "
+            "Skip anything they already clearly know or wouldn't care about."
+        )),
+    ]
+    return llm.invoke(prompt).content
+
+
 def handle_reaction(channel_id: str, user_id: str, text: str, action: str) -> str:
     scope = channel_memory.scope_id(channel_id)
     if action == "save":
@@ -101,6 +130,8 @@ def handle_channel_mention(channel_id: str, user_id: str, text: str, thread_ts: 
     if clean_text == "!summarize":
         memories = channel_memory.get_all(scope)
         return _summarize_memories(memories, f"#{channel_id}")
+    if clean_text == "!catchmeup":
+        return handle_catchmeup(channel_id, user_id)
 
     relevant = channel_memory.search(clean_text, scope)
     history = channel_memory.get_all(scope)
