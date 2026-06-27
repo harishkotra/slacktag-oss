@@ -46,6 +46,21 @@ def _build_messages(system_prompt: str, relevant_memories: list, recent_history:
     return messages
 
 
+def _summarize_memories(memories: list, scope_label: str) -> str:
+    if not memories:
+        return "Nothing stored yet for this scope."
+    raw = _format_memories_for_display(memories)
+    prompt = [
+        SystemMessage(content="You are a helpful assistant."),
+        HumanMessage(content=(
+            f"Here are all the facts stored in memory for {scope_label}:\n\n{raw}\n\n"
+            "Write a concise, readable summary (3–6 sentences) of what has been discussed "
+            "and what key facts are worth remembering."
+        )),
+    ]
+    return llm.invoke(prompt).content
+
+
 def _format_memories_for_display(memories: list) -> str:
     if not memories:
         return "No memories stored for this scope."
@@ -67,6 +82,9 @@ def handle_channel_mention(channel_id: str, user_id: str, text: str, thread_ts: 
     if clean_text == "!memory":
         memories = channel_memory.get_all(scope)
         return f"*Memories for this scope:*\n{_format_memories_for_display(memories)}"
+    if clean_text == "!summarize":
+        memories = channel_memory.get_all(scope)
+        return _summarize_memories(memories, f"#{channel_id}")
 
     relevant = channel_memory.search(clean_text, scope)
     history = channel_memory.get_all(scope)
@@ -97,6 +115,9 @@ def handle_dm(user_id: str, text: str) -> str:
     if clean_text == "!memory":
         memories = dm_memory.get_all(scope)
         return f"*Your memories:*\n{_format_memories_for_display(memories)}"
+    if clean_text == "!summarize":
+        memories = dm_memory.get_all(scope)
+        return _summarize_memories(memories, "your DMs")
 
     relevant = dm_memory.search(clean_text, scope)
     history = dm_memory.get_all(scope)

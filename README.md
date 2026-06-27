@@ -2,7 +2,7 @@
 
 > An open-source Slack bot with persistent semantic memory — backed by any OpenAI-compatible LLM (including local models via Ollama or LM Studio) and [Mem0](https://mem0.ai) for zero-infra memory.
 
-Inspired by Claude Tag's conversational continuity, `slacktag-oss` brings the same "the bot actually remembers what we talked about" feeling to any team, with any LLM, for free.
+`slacktag-oss` brings genuine conversational continuity to Slack — the "the bot actually remembers what we talked about" feeling — to any team, with any LLM, for free.
 
 ---
 
@@ -254,6 +254,7 @@ LLM_MODEL=meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo
 | `!clear` | Wipes all memory for the current channel/DM scope |
 | `forget this channel` | Same as `!clear` |
 | `!memory` | Shows everything the bot currently remembers for this scope |
+| `!summarize` | Asks the LLM to write a readable summary of all stored memories for this scope |
 
 ---
 
@@ -338,7 +339,6 @@ cp .env.example .env   # fill in your tokens
 | Feature | Where to start |
 |---------|---------------|
 | **Pluggable tools** (web search, calculator, code exec) | `tools/registry.py` — wire LangChain tools into `handler.py` |
-| **`!summarize` command** | Add to `handler.py`; call `mem0.get_all()` and ask the LLM to summarize |
 | **Per-channel LLM config** | Store channel-specific model overrides in Mem0 or a simple JSON file |
 | **Mem0 graph memory** | Use Mem0's graph mode to track entity relationships across channels (who's on which team, ongoing projects) |
 | **Spend / rate tracking** | Wrap `llm.invoke()` to count tokens; store counters in Mem0 alongside history |

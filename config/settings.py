@@ -17,7 +17,7 @@ class Settings(BaseSettings):
     MEM0_API_KEY: str
 
     # Bot behavior
-    BOT_NAME: str = "Claude"
+    BOT_NAME: str = "slacktag"
     MAX_HISTORY_MESSAGES: int = 20
     SYSTEM_PROMPT: str = ""
 
