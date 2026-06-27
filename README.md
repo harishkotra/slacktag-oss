@@ -159,6 +159,7 @@ settings:
     bot_events:
       - app_mention
       - message.im
+      - reaction_added
   interactivity:
     is_enabled: false
   socket_mode_enabled: true
@@ -255,6 +256,8 @@ LLM_MODEL=meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo
 | `forget this channel` | Same as `!clear` |
 | `!memory` | Shows everything the bot currently remembers for this scope |
 | `!summarize` | Asks the LLM to write a readable summary of all stored memories for this scope |
+| React 📌 to any message | Explicitly saves that message as a memory fact for this channel |
+| React 🗑️ to any message | Removes the closest matching memory fact for that message |
 
 ---
 
@@ -344,7 +347,6 @@ cp .env.example .env   # fill in your tokens
 | **Spend / rate tracking** | Wrap `llm.invoke()` to count tokens; store counters in Mem0 alongside history |
 | **Slash commands** | Add `/slacktag clear`, `/slacktag memory` as Slack slash commands |
 | **Multi-modal input** | Extract text from image attachments before passing to the LLM |
-| **Reaction triggers** | Let users react with 🧠 to save a specific message into memory explicitly |
 | **HTTP prod adapter** | Flask/FastAPI adapter with proper health check endpoint |
 
 ---

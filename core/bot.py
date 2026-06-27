@@ -1,7 +1,7 @@
 from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 from config.settings import settings
-from core.router import route_mention, route_dm
+from core.router import route_mention, route_dm, route_reaction
 
 app = App(token=settings.SLACK_BOT_TOKEN, signing_secret=settings.SLACK_SIGNING_SECRET)
 
@@ -16,6 +16,11 @@ def on_message(event, say):
     # Only handle DMs; ignore bot messages and channel messages without a mention
     if event.get("channel_type") == "im" and not event.get("bot_id"):
         route_dm(event, say)
+
+
+@app.event("reaction_added")
+def on_reaction_added(event, client, say):
+    route_reaction(event, client, say)
 
 
 def start():

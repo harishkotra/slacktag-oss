@@ -71,6 +71,22 @@ def _format_memories_for_display(memories: list) -> str:
     return "\n".join(lines)
 
 
+def handle_reaction(channel_id: str, user_id: str, text: str, action: str) -> str:
+    scope = channel_memory.scope_id(channel_id)
+    if action == "save":
+        channel_memory.add([{"role": "user", "content": text}], scope)
+        return f"📌 Saved to memory: _{text[:120]}{'…' if len(text) > 120 else ''}_"
+    elif action == "remove":
+        matches = channel_memory.search(text, scope)
+        if not matches:
+            return "Nothing matching that message found in memory."
+        memory_id = matches[0].get("id")
+        if memory_id:
+            channel_memory.client.delete(memory_id)
+            return f"🗑️ Removed from memory: _{matches[0].get('memory', text)[:120]}_"
+    return None
+
+
 def handle_channel_mention(channel_id: str, user_id: str, text: str, thread_ts: str = None) -> str:
     scope = channel_memory.scope_id(channel_id, thread_ts)
 
